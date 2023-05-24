@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { parseMeasureId } from './measure';
 
 import { RiverDataError } from '../river-data-error';
-import { RiverDataErrorResponseError } from '../river-data-error-response-error';
+import { RiverDataResponseError } from '../river-data-response-error';
 
 describe('src/flood-api/measure', function () {
   describe('parseMeasureId', function () {

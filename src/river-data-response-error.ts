@@ -1,4 +1,4 @@
-export class RiverDataErrorResponseError extends Error {
+export class RiverDataResponseError extends Error {
   constructor(
     msg: string,
     public status: string | number,
@@ -9,6 +9,6 @@ export class RiverDataErrorResponseError extends Error {
     }
   ) {
     super(msg);
-    this.name = 'RiverDataErrorResponseError';
+    this.name = 'RiverDataResponseError';
   }
 }

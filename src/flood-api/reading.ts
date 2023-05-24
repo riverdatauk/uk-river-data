@@ -1,7 +1,10 @@
-import { request } from './request';
-import { RiverDataError } from '../river-data-error';
 import type { FloodApiResponse } from './request';
 import type { Reading } from '../reading';
+
+export type FloodApiMeasureReadingsResponse = [
+  m: FloodApiReading[],
+  r: FloodApiResponse<FloodApiReadingDto[]>
+];
 
 /**
  * A reading (internal).
@@ -18,20 +21,27 @@ export interface FloodApiReadingDto {
   value: number; // The value in the appropriate units.
 }
 
-/**
- * Fetch readings for a measure.
- */
-export const fetchMeasureReadings = async (measureId: string) => {
-  const query = { _sorted: '' };
+export interface FloodApiReadingOptions {
+  since?: Date; // Time from.
+}
 
-  if (options.since) {
-    query.since = toTimeParameter(options.since);
-  }
+export const parseReadingDtos = (
+  dtos: FloodApiReadingDto[]
+): Record<string, FloodApiReading[]> => {
+  // Collect the readings according to the measure ID URLs.
+  const longIds: Record<string, FloodApiReading[]> = {};
+  dtos.forEach(({ measure, dateTime, value }) => {
+    if (longIds[measure] == null) {
+      longIds[measure] = [];
+    }
+    longIds[measure].unshift([new Date(dateTime).valueOf() / 1000, value]);
+  });
 
-  const response = <FloodApiResponse<FloodApiReadingDto[]>>(
-    await request(`/id/measures/${measureId}/readings`, { query })
-  );
+  // Strip the URLs from the measure IDs.
+  const shortIds: Record<string, FloodApiReading[]> = {};
+  Object.entries(longIds).forEach(([key, range]) => {
+    shortIds[key.substring(key.lastIndexOf('/') + 1)] = range;
+  });
 
-  // Get the response, casting the items to ReadingDTOs.
-  return [parseReadingDtos(response.data.items)[id] || [], response];
+  return shortIds;
 };

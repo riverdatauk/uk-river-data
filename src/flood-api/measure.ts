@@ -4,6 +4,15 @@ import { FloodApiResponse } from '../flood-api/request';
 /**
  * A measure.
  */
+export interface FloodApiMeasure {
+  api: 'flood';
+  id: string;
+  dto: FloodApiMeasureDto;
+}
+
+/**
+ * Parsed parts of a measure.
+ */
 export interface FloodApiMeasureIdParts {
   id: string;
   station: string;
@@ -12,15 +21,6 @@ export interface FloodApiMeasureIdParts {
   qualifiedParameter: string;
   interval: string;
   unit: string;
-}
-
-/**
- * A measure.
- */
-export interface FloodApiMeasure {
-  api: 'flood',
-  id: string;
-  dto: FloodApiMeasureDto;
 }
 
 /**
@@ -69,7 +69,6 @@ export const parseMeasureDto = (dto: FloodApiMeasureDto): FloodApiMeasure => {
     dto,
   };
 };
-
 
 /**
  * Parse a measure ID from the EA Flood Monitoring API.

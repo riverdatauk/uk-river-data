@@ -8,12 +8,20 @@
   console.log({ parsed });
 
   const testMeasure = async () => {
-    const kingstonFlow = await FloodApi.fetchMeasure(
+    const floodApi = new FloodApi();
+
+    const kingstonFlow = await floodApi.fetchMeasure(
       '3400TH-flow--i-15_min-m3_s'
     );
-    console.log({ kingstonFlow });
+
+    const kingstonFlowReadings = await floodApi.fetchMeasureReadings(
+      '3400TH-flow--i-15_min-m3_s'
+    );
+
+    console.log({ kingstonFlow, kingstonFlowReadings });
+
     try {
-      await FloodApi.fetchMeasure('does-not-exist');
+      await floodApi.fetchMeasure('does-not-exist');
     } catch (e) {
       console.log(e.message, e.name);
     }

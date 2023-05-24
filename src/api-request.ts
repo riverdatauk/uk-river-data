@@ -1,4 +1,4 @@
-import { RiverDataErrorResponseError } from './river-data-error-response-error';
+import { RiverDataResponseError } from './river-data-response-error';
 
 /**
  * A parsed response.
@@ -45,15 +45,11 @@ export const apiRequest = async (
 
   // Deal with an HTTP error status.
   if (!response.ok) {
-    throw new RiverDataErrorResponseError(
-      response.statusText,
-      response.status,
-      {
-        url,
-        requestOptions,
-        response,
-      }
-    );
+    throw new RiverDataResponseError(response.statusText, response.status, {
+      url,
+      requestOptions,
+      response,
+    });
   }
   return { data: await response.json(), response };
 };
