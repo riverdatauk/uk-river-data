@@ -1,0 +1,23 @@
+<script src="../index.min.js"></script>
+<script>
+  console.log({ UkRiverData });
+  const { FloodApi } = UkRiverData;
+  const parsed = FloodApi.parseMeasureId(
+    's/t/r/i/p/flood/abcd-edsdf-sdaf-asd-ddd'
+  );
+  console.log({ parsed });
+
+  const testMeasure = async () => {
+    const kingstonFlow = await FloodApi.fetchMeasure(
+      '3400TH-flow--i-15_min-m3_s'
+    );
+    console.log({ kingstonFlow });
+    try {
+      await FloodApi.fetchMeasure('does-not-exist');
+    } catch (e) {
+      console.log(e.message, e.name);
+    }
+  };
+
+  testMeasure();
+</script>

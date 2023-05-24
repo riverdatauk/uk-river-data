@@ -18,19 +18,20 @@ const name = camelCase(pkgName, { pascalCase: true });
 const banner = `/*! ${name} v${pkg.version} ${datetime}
  *! ${pkg.homepage}
  *! Copyright (C) ${year} ${pkg.author}.
- *! License ${pkg.license}.
+ *! ${pkg.license} license.
  */
 `;
 
 // Target ECMAScript version (es2017 is good for all modern browsers in 2023).
-const target = 'es2020';
+const target = 'es2017';
 
 export default [
   {
     input: './src/index.ts',
     output: {
       name,
-      file: `./dist/${pkgName}.min.js`,
+      file: 'index.min.js',
+      // file: `./${pkgName}.min.js`,
       format: 'iife',
       banner,
       sourcemap: true,
@@ -52,14 +53,14 @@ export default [
     output: [
       /*
       {
-        file: './dist/index.mjs',
+        file: './index.mjs',
         format: 'esm',
         banner,
         sourcemap: true,
       },
       */
       {
-        file: './dist/index.cjs',
+        file: './index.cjs',
         format: 'commonjs',
         banner,
         sourcemap: true,
