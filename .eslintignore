@@ -1,0 +1,9 @@
+# .eslintignore
+
+# Distribution files.
+/index.*
+
+# Code coverage and documentation.
+.nyc_output
+coverage
+docs

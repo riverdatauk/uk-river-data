@@ -1,0 +1,51 @@
+{
+  "name": "uk-river-data",
+  "version": "0.9.0",
+  "description": "Access level, flow and other data for UK rivers and other watercourses.",
+  "license": "MIT",
+  "author": "riverdatauk (https://github.com/riverdatauk)",
+  "repository": "github:riverdatauk/uk-river-data",
+  "homepage": "https://github.com/riverdatauk/uk-river-data",
+  "bugs": "https://github.com/riverdatauk/uk-river-data/issues",
+  "type": "module",
+  "types": "index.d.ts",
+  "main": "index.cjs",
+  "browser": "index.min.js",
+  "keywords": [
+    "river flow",
+    "river level",
+    "groundwater",
+    "tides"
+  ],
+  "files": [
+    "index.*"
+  ],
+  "scripts": {
+    "build": "npm run build:clean && rollup -c && tsc --project tsconfig.types.json",
+    "build:clean": "rimraf \"index.*\" --glob",
+    "coverage": "rimraf coverage && c8 -r html -r text npm run test:unit",
+    "lint": "eslint . --fix && prettier . --write",
+    "lint:check": "eslint . && prettier . --check",
+    "test:unit": "mocha src/**/*.spec.ts"
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.1",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "c8": "^7.13.0",
+    "camelcase": "^7.0.1",
+    "chai": "^4.3.7",
+    "eslint": "^8.41.0",
+    "eslint-plugin-mocha": "^10.1.0",
+    "mocha": "^10.2.0",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.23.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

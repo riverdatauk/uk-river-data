@@ -1,0 +1,10 @@
+# .prettierignore
+
+# Distribution files.
+/index.*
+!/index.ts
+
+# Code coverage and documentation.
+.nyc_output
+coverage
+docs
