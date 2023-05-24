@@ -40,7 +40,6 @@
     "c8": "^7.13.0",
     "camelcase": "^7.0.1",
     "chai": "^4.3.7",
-    "chai-as-promised": "^7.1.1",
     "eslint": "^8.41.0",
     "eslint-plugin-mocha": "^10.1.0",
     "mocha": "^10.2.0",

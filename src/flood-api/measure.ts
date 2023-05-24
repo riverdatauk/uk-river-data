@@ -1,11 +1,10 @@
-import { request } from './request';
 import { RiverDataError } from '../river-data-error';
-import type { FloodApiResponse } from './request';
+import { FloodApiResponse } from '../flood-api/request';
 
 /**
  * A measure.
  */
-export interface FloodApiMeasure {
+export interface FloodApiMeasureIdParts {
   id: string;
   station: string;
   parameter: string;
@@ -13,6 +12,15 @@ export interface FloodApiMeasure {
   qualifiedParameter: string;
   interval: string;
   unit: string;
+}
+
+/**
+ * A measure.
+ */
+export interface FloodApiMeasure {
+  api: 'flood',
+  id: string;
+  dto: FloodApiMeasureDto;
 }
 
 /**
@@ -41,12 +49,34 @@ export interface FloodApiMeasureDto {
   valueType: string;
 }
 
+export type FloodApiMeasureResponse = [
+  m: FloodApiMeasure,
+  r: FloodApiResponse<FloodApiMeasureDto>
+];
+
 /**
  * Parse a measure ID from the EA Flood Monitoring API.
  *
  * @param url The url of a measure (any path will be stripped).
  */
-export const parseMeasureId = (url: string): FloodApiMeasure => {
+export const parseMeasureDto = (dto: FloodApiMeasureDto): FloodApiMeasure => {
+  // Strip the path from the id.
+  const id = dto['@id'].slice(dto['@id'].lastIndexOf('/') + 1);
+
+  return {
+    id,
+    api: 'flood',
+    dto,
+  };
+};
+
+
+/**
+ * Parse a measure ID from the EA Flood Monitoring API.
+ *
+ * @param url The url of a measure (any path will be stripped).
+ */
+export const parseMeasureId = (url: string): FloodApiMeasureIdParts => {
   // Strip any path and split into parts.
   const id = url.slice(url.lastIndexOf('/') + 1);
   const parts = id.split('-');
@@ -67,11 +97,4 @@ export const parseMeasureId = (url: string): FloodApiMeasure => {
     interval,
     unit,
   };
-};
-
-export const fetchMeasure = async (id: string) => {
-  const measure = <FloodApiResponse<FloodApiMeasureDto>>(
-    await request(`/id/measures/${id}`)
-  );
-  return measure;
 };
