@@ -8,7 +8,7 @@
   "homepage": "https://github.com/riverdatauk/uk-river-data",
   "bugs": "https://github.com/riverdatauk/uk-river-data/issues",
   "type": "module",
-  "types": "index.d.ts",
+  "types": "types",
   "main": "index.cjs",
   "browser": "index.min.js",
   "keywords": [
@@ -18,7 +18,8 @@
     "tides"
   ],
   "files": [
-    "index.*"
+    "index.*",
+    "types"
   ],
   "scripts": {
     "build": "npm run build:clean && rollup -c && tsc --project tsconfig.types.json",
