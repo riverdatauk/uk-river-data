@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { RiverDataError } from './river-data-error';
+import { RiverDataError } from '../../src/river-data-error';
 
 describe('class RiverDataError', function () {
   it('should have the right name', function () {

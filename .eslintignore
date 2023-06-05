@@ -2,6 +2,7 @@
 
 # Distribution files.
 /index.*
+types
 
 # Code coverage and documentation.
 .nyc_output

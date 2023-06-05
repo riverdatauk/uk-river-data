@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
-import { RiverDataResponseError } from '../river-data-response-error';
+import { RiverDataResponseError } from '../../../src/river-data-response-error';
 
-import { FloodApi } from './flood-api';
+import { FloodApi } from '../../../src/flood-api/flood-api';
 
 describe('The FloodApi class', function () {
   describe('fetchMeasure()', function () {
