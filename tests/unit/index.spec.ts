@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import * as index from './index';
-import { version } from './index';
+import * as index from '../../src/index';
+import { version } from '../../src/index';
 
 import { readFile } from 'node:fs/promises';
 

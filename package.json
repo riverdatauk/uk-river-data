@@ -1,6 +1,6 @@
 {
   "name": "uk-river-data",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Access level, flow and other data for UK rivers and other watercourses.",
   "license": "MIT",
   "author": "riverdatauk (https://github.com/riverdatauk)",
@@ -23,11 +23,11 @@
   ],
   "scripts": {
     "build": "npm run build:clean && rollup -c && tsc --project tsconfig.types.json",
-    "build:clean": "rimraf \"index.*\" --glob",
+    "build:clean": "rimraf \"index.*\" types --glob",
     "coverage": "rimraf coverage && c8 -r html -r text npm run test:unit",
     "lint": "eslint . --fix && prettier . --write",
     "lint:check": "eslint . && prettier . --check",
-    "test:unit": "mocha src/**/*.spec.ts"
+    "test:unit": "mocha tests/unit/**/*.{test,spec}.{js,ts}"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.0.0",

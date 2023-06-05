@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 
-import { parseMeasureId } from './measure';
+import { parseMeasureId } from '../../../src/flood-api/measure';
 
-import { RiverDataError } from '../river-data-error';
-import { RiverDataResponseError } from '../river-data-response-error';
+import { RiverDataError } from '../../../src/river-data-error';
+import { RiverDataResponseError } from '../../../src/river-data-response-error';
 
 describe('src/flood-api/measure', function () {
   describe('parseMeasureId', function () {

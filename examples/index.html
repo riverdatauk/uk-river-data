@@ -23,7 +23,7 @@
     try {
       await floodApi.fetchMeasure('does-not-exist');
     } catch (e) {
-      console.log(e.message, e.name);
+      console.log('Error fetching measure', e.message, e.name);
     }
   };
 
