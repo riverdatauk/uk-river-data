@@ -8,7 +8,7 @@ package-lock.json
 !/index.ts
 types
 
-# Code coverage and documentation.
+# Code coverage and API documentation.
 .nyc_output
 coverage
-docs
+docs/api

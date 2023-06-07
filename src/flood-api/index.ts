@@ -1,1 +1,1 @@
-export { FloodApi } from './flood-api';
+export { FloodApiClient } from './flood-api-client';

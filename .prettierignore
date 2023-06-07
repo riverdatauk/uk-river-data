@@ -4,7 +4,7 @@
 /index.*
 types
 
-# Code coverage and documentation.
+# Code coverage and API documentation.
 .nyc_output
 coverage
-docs
+docs/api

@@ -18,6 +18,10 @@ describe('The UkRiverData entry point', function () {
   });
 
   it('should only expose the public API', function () {
-    expect(Object.keys(index).sort()).to.eql(['FloodApi', 'version']);
+    expect(Object.keys(index).sort()).to.eql([
+      'FloodApiClient',
+      'HydrologyApiClient',
+      'version',
+    ]);
   });
 });

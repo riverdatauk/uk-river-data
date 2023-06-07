@@ -1,5 +1,4 @@
 import { RiverDataError } from '../river-data-error';
-import { FloodApiResponse } from '../flood-api/request';
 
 /**
  * A measure.
@@ -48,11 +47,6 @@ export interface FloodApiMeasureDto {
   unitName: string;
   valueType: string;
 }
-
-export type FloodApiMeasureResponse = [
-  m: FloodApiMeasure,
-  r: FloodApiResponse<FloodApiMeasureDto>
-];
 
 /**
  * Parse a measure ID from the EA Flood Monitoring API.

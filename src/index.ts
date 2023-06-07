@@ -1,4 +1,5 @@
-export { FloodApi } from './flood-api';
+export { FloodApiClient } from './flood-api';
+export { HydrologyApiClient } from './hydrology-api';
 
 /**
  * Current version.

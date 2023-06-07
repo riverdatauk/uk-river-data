@@ -1,10 +1,4 @@
-import type { FloodApiResponse } from './request';
 import type { Reading } from '../reading';
-
-export type FloodApiMeasureReadingsResponse = [
-  m: FloodApiReading[],
-  r: FloodApiResponse<FloodApiReadingDto[]>
-];
 
 /**
  * A reading (internal).
