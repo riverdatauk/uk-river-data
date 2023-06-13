@@ -34,7 +34,7 @@ describe('The FloodApi class', function () {
       this.timeout(10000);
       const floodApi = new FloodApiClient();
       const now = new Date().valueOf();
-      const {data: readings} = await floodApi.fetchMeasureReadings(
+      const { data: readings } = await floodApi.fetchMeasureReadings(
         '3400TH-flow--i-15_min-m3_s',
         { since: new Date(now - 86400000) }
       );

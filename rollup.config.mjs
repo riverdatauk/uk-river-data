@@ -51,14 +51,12 @@ export default [
   {
     input: './src/index.ts',
     output: [
-      /*
       {
         file: './index.mjs',
         format: 'esm',
         banner,
         sourcemap: true,
       },
-      */
       {
         file: './index.cjs',
         format: 'commonjs',

@@ -1,14 +1,14 @@
 <script src="../index.min.js"></script>
 <script>
   console.log({ UkRiverData });
-  const { FloodApi } = UkRiverData;
-  const parsed = FloodApi.parseMeasureId(
+  const { FloodApiClient } = UkRiverData;
+  const parsed = FloodApiClient.parseMeasureId(
     's/t/r/i/p/flood/abcd-edsdf-sdaf-asd-ddd'
   );
   console.log({ parsed });
 
   const testMeasure = async () => {
-    const floodApi = new FloodApi();
+    const floodApi = new FloodApiClient();
 
     const kingstonFlow = await floodApi.fetchMeasure(
       '3400TH-flow--i-15_min-m3_s'

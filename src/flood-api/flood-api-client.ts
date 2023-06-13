@@ -8,6 +8,12 @@ import {
 } from './measure';
 
 import {
+  parseStationDto,
+  FloodApiStationDto,
+  FloodApiStation,
+} from './station';
+
+import {
   parseReadingDtos,
   FloodApiReading,
   FloodApiReadingDto,
@@ -90,6 +96,26 @@ export class FloodApiClient extends RiverDataClient {
 
     // Get the response, casting the items to ReadingDTOs.
     const data = parseReadingDtos(json.items)[measureId];
+    return { data, json, response };
+  }
+
+  /**
+   * Fetch an identified station.
+   */
+  async fetchStation(
+    id: string
+  ): Promise<
+    RiverDataResponse<FloodApiStation, FloodApiResponseJson<FloodApiStationDto>>
+  > {
+    const res = await this.fetch<FloodApiResponseJson<FloodApiStationDto>>(
+      `/id/stations/${id}`
+    );
+
+    const { response } = res;
+    const json = res.json as FloodApiResponseJson<FloodApiStationDto>;
+
+    // Get the response, casting the items to a Measure DTO.
+    const data = parseStationDto(json.items);
     return { data, json, response };
   }
 

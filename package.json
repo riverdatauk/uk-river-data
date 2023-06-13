@@ -10,6 +10,7 @@
   "type": "module",
   "types": "types",
   "main": "index.cjs",
+  "module": "index.mjs",
   "browser": "index.min.js",
   "keywords": [
     "river flow",

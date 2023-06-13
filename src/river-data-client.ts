@@ -4,7 +4,7 @@ import { RiverDataResponseError } from './river-data-response-error';
  * A successful response.
  */
 export interface RiverDataResponse<T, J> {
-  data?: T;
+  data: T;
   json?: J;
   body?: string;
   response: Response;
@@ -25,13 +25,12 @@ export interface RiverDataRequestOptions {
 
 export class RiverDataClient {
   protected baseUrl = '';
-  protected useFetch: (
-    path: string,
-    options?: RequestInit
-  ) => Promise<Response>;
+  protected useFetch:
+    | ((path: string, options?: RequestInit) => Promise<Response>)
+    | null;
 
   constructor(options: RiverDataClientOptions = {}) {
-    this.useFetch = options.fetch ?? fetch;
+    this.useFetch = options.fetch ?? null;
   }
   /**
    * Make a request to the API.
@@ -39,7 +38,7 @@ export class RiverDataClient {
   async fetch<T>(
     path: string,
     options: RiverDataRequestOptions = {}
-  ): Promise<RiverDataResponse<unknown, T>> {
+  ): Promise<RiverDataResponse<undefined, T>> {
     // Build the url adding any query parameters.
     const queryString = options.query
       ? new URLSearchParams(options.query).toString()
@@ -55,7 +54,9 @@ export class RiverDataClient {
     }
 
     const requestOptions: RequestInit = { headers, ...options.options };
-    const response = await this.useFetch(url, requestOptions);
+    const response = await (this.useFetch
+      ? this.useFetch(url, requestOptions)
+      : fetch(url, requestOptions));
 
     // Deal with an HTTP error status.
     if (!response.ok) {
@@ -68,10 +69,10 @@ export class RiverDataClient {
     const body = await response.text();
     try {
       // Return json if we can...
-      return { json: JSON.parse(body) as T, response };
+      return { data: undefined, json: JSON.parse(body) as T, response };
     } catch (err) {
       // ...otherwise the body.
-      return { body, response };
+      return { data: undefined, body, response };
     }
   }
 }

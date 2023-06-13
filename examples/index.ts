@@ -1,6 +1,6 @@
-import { FloodApi } from '../src/';
+import { FloodApiClient } from '../src/';
 
-const parsed = FloodApi.parseMeasureId('asd');
+const parsed = FloodApiClient.parseMeasureId('asd');
 
 const { unit } = parsed;
 
