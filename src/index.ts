@@ -1,5 +1,5 @@
-export { FloodApiClient } from './flood-api';
-export { HydrologyApiClient } from './hydrology-api';
+export * as FloodApi from './flood-api';
+export * as HydrologyApi from './hydrology-api';
 // import { version } from '../package.json';
 
 /**

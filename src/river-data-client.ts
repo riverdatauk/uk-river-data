@@ -25,6 +25,7 @@ export interface RiverDataRequestOptions {
 
 export class RiverDataClient {
   protected baseUrl = '';
+
   protected useFetch:
     | ((path: string, options?: RequestInit) => Promise<Response>)
     | null;
@@ -32,6 +33,7 @@ export class RiverDataClient {
   constructor(options: RiverDataClientOptions = {}) {
     this.useFetch = options.fetch ?? null;
   }
+
   /**
    * Make a request to the API.
    */
@@ -53,7 +55,10 @@ export class RiverDataClient {
       headers.set('accept', 'application/json');
     }
 
+    // Build the request options allowing any additions or overrides.
     const requestOptions: RequestInit = { headers, ...options.options };
+
+    // Send the request using native `fetch` or an override.
     const response = await (this.useFetch
       ? this.useFetch(url, requestOptions)
       : fetch(url, requestOptions));
@@ -66,7 +71,9 @@ export class RiverDataClient {
         response,
       });
     }
+
     const body = await response.text();
+
     try {
       // Return json if we can...
       return { data: undefined, json: JSON.parse(body) as T, response };

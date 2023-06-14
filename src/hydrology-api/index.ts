@@ -1,1 +1,1 @@
-export { HydrologyApiClient } from './hydrology-api-client';
+export { HydrologyApiClient } from './client';

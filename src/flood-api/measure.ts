@@ -1,4 +1,6 @@
 import { RiverDataError } from '../river-data-error';
+import { FloodApiClient, FloodApiResponseJson } from './client';
+import type { RiverDataResponse } from '../river-data-client';
 
 /**
  * A measure.
@@ -7,6 +9,13 @@ export interface FloodApiMeasure {
   api: 'flood';
   id: string;
   dto: FloodApiMeasureDto;
+}
+
+/**
+ * A measure.
+ */
+export interface FloodApiMeasureOptions {
+  client?: FloodApiClient;
 }
 
 /**
@@ -47,6 +56,28 @@ export interface FloodApiMeasureDto {
   unitName: string;
   valueType: string;
 }
+
+/**
+ * Fetch an identified measure.
+ */
+export const fetchMeasure = async (
+  id: string,
+  options: FloodApiMeasureOptions = {}
+): Promise<
+  RiverDataResponse<FloodApiMeasure, FloodApiResponseJson<FloodApiMeasureDto>>
+> => {
+  const client = options.client ?? new FloodApiClient();
+  const res = await client.fetch<FloodApiResponseJson<FloodApiMeasureDto>>(
+    `/id/measures/${id}`
+  );
+
+  const { response } = res;
+  const json = res.json as FloodApiResponseJson<FloodApiMeasureDto>;
+
+  // Get the response, casting the items to a Measure DTO.
+  const data = parseMeasureDto(json.items);
+  return { data, json, response };
+};
 
 /**
  * Parse a measure ID from the EA Flood Monitoring API.

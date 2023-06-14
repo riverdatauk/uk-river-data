@@ -1,27 +1,26 @@
 <script src="../index.min.js"></script>
 <script>
   console.log({ UkRiverData });
-  const { FloodApiClient } = UkRiverData;
-  const parsed = FloodApiClient.parseMeasureId(
+  const { FloodApi } = UkRiverData;
+  const parsed = FloodApi.parseMeasureId(
     's/t/r/i/p/flood/abcd-edsdf-sdaf-asd-ddd'
   );
   console.log({ parsed });
 
   const testMeasure = async () => {
-    const floodApi = new FloodApiClient();
 
-    const kingstonFlow = await floodApi.fetchMeasure(
+    const kingstonFlow = await FloodApi.fetchMeasure(
       '3400TH-flow--i-15_min-m3_s'
     );
 
-    const kingstonFlowReadings = await floodApi.fetchMeasureReadings(
+    const kingstonFlowReadings = await FloodApi.fetchMeasureReadings(
       '3400TH-flow--i-15_min-m3_s'
     );
 
     console.log({ kingstonFlow, kingstonFlowReadings });
 
     try {
-      await floodApi.fetchMeasure('does-not-exist');
+      await FloodApi.fetchMeasure('does-not-exist');
     } catch (e) {
       console.log('Error fetching measure', e.message, e.name);
     }

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 // import { RiverDataResponseError } from '../../../src/river-data-response-error';
 
-import { HydrologyApiClient } from '../../../src/hydrology-api/hydrology-api-client';
+import { HydrologyApiClient } from '../../../src/hydrology-api/client';
 
 describe('The HydrologyApi class', function () {
   describe('fetchReadings()', function () {
