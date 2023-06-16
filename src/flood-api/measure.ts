@@ -1,27 +1,37 @@
 import { RiverDataError } from '../river-data-error';
-import { FloodApiClient, FloodApiResponseJson } from './client';
+import { createClient } from './client';
+
+import type { Client, ResponseJson } from './client';
 import type { RiverDataResponse } from '../river-data-client';
 
-/**
- * A measure.
- */
-export interface FloodApiMeasure {
-  api: 'flood';
-  id: string;
-  dto: FloodApiMeasureDto;
+export interface LatestReading {
+  '@id': string;
+  date: string;
+  dateTime: string;
+  measure: string;
+  value: number;
 }
 
 /**
  * A measure.
  */
-export interface FloodApiMeasureOptions {
-  client?: FloodApiClient;
+export interface Measure {
+  api: 'flood';
+  id: string;
+  dto: MeasureDto;
+}
+
+/**
+ * A measure.
+ */
+export interface MeasureOptions {
+  client?: Client;
 }
 
 /**
  * Parsed parts of a measure.
  */
-export interface FloodApiMeasureIdParts {
+export interface MeasureIdParts {
   id: string;
   station: string;
   parameter: string;
@@ -34,16 +44,10 @@ export interface FloodApiMeasureIdParts {
 /**
  * A measure.
  */
-export interface FloodApiMeasureDto {
+export interface MeasureDto {
   '@id': string;
   label: string;
-  latestReading: {
-    '@id': string;
-    date: string;
-    dateTime: string;
-    measure: string;
-    value: number;
-  };
+  latestReading: LatestReading | string;
   notation: string;
   parameter: string;
   parameterName: string;
@@ -62,17 +66,15 @@ export interface FloodApiMeasureDto {
  */
 export const fetchMeasure = async (
   id: string,
-  options: FloodApiMeasureOptions = {}
-): Promise<
-  RiverDataResponse<FloodApiMeasure, FloodApiResponseJson<FloodApiMeasureDto>>
-> => {
-  const client = options.client ?? new FloodApiClient();
-  const res = await client.fetch<FloodApiResponseJson<FloodApiMeasureDto>>(
+  options: MeasureOptions = {}
+): Promise<RiverDataResponse<Measure, ResponseJson<MeasureDto>>> => {
+  const client = options.client ?? (await createClient());
+  const res = await client.fetch<ResponseJson<MeasureDto>>(
     `/id/measures/${id}`
   );
 
   const { response } = res;
-  const json = res.json as FloodApiResponseJson<FloodApiMeasureDto>;
+  const json = res.json as ResponseJson<MeasureDto>;
 
   // Get the response, casting the items to a Measure DTO.
   const data = parseMeasureDto(json.items);
@@ -84,7 +86,7 @@ export const fetchMeasure = async (
  *
  * @param url The url of a measure (any path will be stripped).
  */
-export const parseMeasureDto = (dto: FloodApiMeasureDto): FloodApiMeasure => {
+export const parseMeasureDto = (dto: MeasureDto): Measure => {
   // Strip the path from the id.
   const id = dto['@id'].slice(dto['@id'].lastIndexOf('/') + 1);
 
@@ -100,14 +102,14 @@ export const parseMeasureDto = (dto: FloodApiMeasureDto): FloodApiMeasure => {
  *
  * @param url The url of a measure (any path will be stripped).
  */
-export const parseMeasureId = (url: string): FloodApiMeasureIdParts => {
+export const parseMeasureId = (url: string): MeasureIdParts => {
   // Strip any path and split into parts.
   const id = url.slice(url.lastIndexOf('/') + 1);
   const parts = id.split('-');
 
   // Check we have the right number of parts.
   if (parts.length !== 5) {
-    throw new RiverDataError('Invalid measure id', { url, id });
+    throw new RiverDataError('Invalid measure id', { id });
   }
 
   const [station, parameter, qualifier, interval, unit] = parts;

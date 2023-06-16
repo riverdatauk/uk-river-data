@@ -1,27 +1,26 @@
-import { RiverDataError } from '../river-data-error';
-import { toTimeParameter } from './client';
+import { toTimeParameter, createClient } from './client';
 
-import { FloodApiClient, FloodApiResponseJson } from './client';
+import type { ResponseJson, Client } from './client';
 import type { RiverDataResponse } from '../river-data-client';
-import type { Reading } from '../reading';
+import type { Reading as BaseReading } from '../reading';
 
 /**
  * A reading (internal).
  */
-export type FloodApiReading = Reading<undefined>;
+export type Reading = BaseReading<undefined>;
 
 /**
  * A reading (external).
  */
-export interface FloodApiReadingDto {
+export interface ReadingDto {
   '@id': string; // The URL of this reading.
   dateTime: string; // e.g. '2023-05-13T09:00:00Z'.
   measure: string; // The URL of the measure.
   value: number; // The value in the appropriate units.
 }
 
-export interface FloodApiReadingOptions {
-  client?: FloodApiClient;
+export interface ReadingOptions {
+  client?: Client;
   since?: Date; // Time from.
 }
 
@@ -30,21 +29,16 @@ export interface FloodApiReadingOptions {
  */
 export const fetchMeasureReadings = async (
   measureId: string,
-  options: FloodApiReadingOptions = {}
-): Promise<
-  RiverDataResponse<
-    FloodApiReading[],
-    FloodApiResponseJson<FloodApiReadingDto[]>
-  >
-> => {
+  options: ReadingOptions = {}
+): Promise<RiverDataResponse<Reading[], ResponseJson<ReadingDto[]>>> => {
   const query: Record<string, string> = { _sorted: '' };
 
   if (options.since) {
     query.since = toTimeParameter(options.since);
   }
 
-  const client = options.client ?? new FloodApiClient();
-  const res = await client.fetch<FloodApiResponseJson<FloodApiReadingDto[]>>(
+  const client = options.client ?? (await createClient());
+  const res = await client.fetch<ResponseJson<ReadingDto[]>>(
     `/id/measures/${measureId}/readings`,
     {
       query,
@@ -52,7 +46,7 @@ export const fetchMeasureReadings = async (
   );
 
   const { response } = res;
-  const json = res.json as FloodApiResponseJson<FloodApiReadingDto[]>;
+  const json = res.json as ResponseJson<ReadingDto[]>;
 
   // Get the response, casting the items to ReadingDTOs.
   const data = parseReadingDtos(json.items)[measureId];
@@ -60,10 +54,10 @@ export const fetchMeasureReadings = async (
 };
 
 export const parseReadingDtos = (
-  dtos: FloodApiReadingDto[]
-): Record<string, FloodApiReading[]> => {
+  dtos: ReadingDto[]
+): Record<string, Reading[]> => {
   // Collect the readings according to the measure ID URLs.
-  const longIds: Record<string, FloodApiReading[]> = {};
+  const longIds: Record<string, Reading[]> = {};
   dtos.forEach(({ measure, dateTime, value }) => {
     if (longIds[measure] == null) {
       longIds[measure] = [];
@@ -72,7 +66,7 @@ export const parseReadingDtos = (
   });
 
   // Strip the URLs from the measure IDs.
-  const shortIds: Record<string, FloodApiReading[]> = {};
+  const shortIds: Record<string, Reading[]> = {};
   Object.entries(longIds).forEach(([key, range]) => {
     shortIds[key.substring(key.lastIndexOf('/') + 1)] = range;
   });

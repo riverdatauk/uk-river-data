@@ -1,15 +1,15 @@
-import { RiverDataClient, RiverDataResponse } from '../river-data-client';
+import { RiverDataClient } from '../river-data-client';
 
 /**
  * A parsed response from the EA Flood Monitoring API.
  */
-export interface FloodApiResponseJson<T> {
+export interface ResponseJson<T> {
   '@context': string;
-  meta: FloodApiResponseMetaDto;
+  meta: ResponseMetaDto;
   items: T;
 }
 
-export interface FloodApiResponseMetaDto {
+export interface ResponseMetaDto {
   publisher: string;
   license: string;
   documentation: string;
@@ -21,9 +21,13 @@ export interface FloodApiResponseMetaDto {
 /**
  * Access data from the EA Flood Monitoring Real Time API.
  */
-export class FloodApiClient extends RiverDataClient {
+export class Client extends RiverDataClient {
   protected baseUrl = 'http://environment.data.gov.uk/flood-monitoring';
 }
+
+export const createClient = async () => {
+  return new Client();
+};
 
 /**
  * Convert a Date to a format recognized by the EA API for a query parameter.

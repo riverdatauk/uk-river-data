@@ -1,18 +1,15 @@
 import { expect } from 'chai';
 
-// import { RiverDataResponseError } from '../../../src/river-data-response-error';
+import { fetchReadings } from '../../../src/hydrology-api/reading';
 
-import { HydrologyApiClient } from '../../../src/hydrology-api/client';
-
-describe('The HydrologyApi class', function () {
+describe('HydrologyApi readings', function () {
   describe('fetchReadings()', function () {
     it('should fetch readings using criteria', async function () {
       this.timeout(10000);
-      const api = new HydrologyApiClient();
       const criteria = {
         'station.wiskiID': '3400TH',
       };
-      const { data } = await api.fetchReadings(criteria);
+      const { data } = await fetchReadings(criteria);
       expect(data).not.to.be.undefined;
       expect(Object.entries(data ?? {}).length).to.equal(7);
     });
