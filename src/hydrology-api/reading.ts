@@ -54,7 +54,7 @@ export const parseReadingDtos = (
 ): Record<string, Reading[]> => {
   // Collect the readings according to the measure ID URLs.
   const longIds: Record<string, Reading[]> = {};
-  dtos.forEach((dto) => {
+  for (const dto of dtos) {
     const measureId = dto.measure['@id'];
     if (longIds[measureId] == null) {
       longIds[measureId] = [];
@@ -78,13 +78,13 @@ export const parseReadingDtos = (
       dto.value ?? null,
       readingMeta,
     ]);
-  });
+  }
 
   // Strip the URLs from the measure IDs.
   const shortIds: Record<string, Reading[]> = {};
-  Object.entries(longIds).forEach(([key, range]) => {
-    shortIds[key.substring(key.lastIndexOf('/') + 1)] = range;
-  });
+  for (const [key, range] of Object.entries(longIds)) {
+    shortIds[key.slice(key.lastIndexOf('/') + 1)] = range;
+  }
 
   return shortIds;
 };
@@ -95,33 +95,24 @@ export const parseReadingDtos = (
  * optional criteria:
  * wiskiID
  *
+ * @REVISIT Need to use non-arrow functions for TS overloading.
  */
-/*
-const fetchReadings = async (
+export async function fetchReadings(
   id: string,
   options?: ReadingOptions
-) => Promise<
-  RiverDataResponse<
-    Reading[],
-    ResponseJson<ReadingDto[]>
-  >
->;
+): Promise<RiverDataResponse<Reading[], ResponseJson<ReadingDto[]>>>;
 
-const fetchReadings = async (
-  async fetchReadings(
+export async function fetchReadings(
   criteria: ReadingCriteria,
   options?: ReadingOptions
-) => Promise<
-  RiverDataResponse<
-    Record<string, Reading[]>,
-    ResponseJson<ReadingDto[]>
-  >
+): Promise<
+  RiverDataResponse<Record<string, Reading[]>, ResponseJson<ReadingDto[]>>
 >;
-*/
-export const fetchReadings = async (
+
+export async function fetchReadings(
   idOrCriteria: string | ReadingCriteria,
   options: ReadingOptions = {}
-) => {
+) {
   const query: Record<string, string> = {
     _view: 'full',
     // _sort: 'dateTime',
@@ -165,4 +156,4 @@ export const fetchReadings = async (
   return <
     RiverDataResponse<Record<string, Reading[]>, ResponseJson<ReadingDto[]>>
   >{ data, json, response };
-};
+}

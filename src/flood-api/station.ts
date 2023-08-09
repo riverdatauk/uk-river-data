@@ -1,6 +1,9 @@
 import { createClient } from './client';
 
-import type { RiverDataResponse } from '../river-data-client';
+import type {
+  RiverDataClientOptions,
+  RiverDataResponse,
+} from '../river-data-client';
 import type { Client, ResponseJson } from './client';
 import { MeasureDto } from './measure';
 
@@ -14,7 +17,7 @@ export interface Station {
 }
 
 /**
- * A station.
+ * Scale information for a station.
  */
 export interface Scale {
   '@id': string;
@@ -50,11 +53,14 @@ export interface StationDto {
   dateOpened: string;
   eaAreaName: string;
   eaRegionName: string;
+  // e.g. stations/3399TH.
+  gridReference?: string;
   easting: string;
   northing: string;
   lat: string;
   long: string;
-  measures: MeasureDto[];
+  // e.g. stations/44239 (Kingston Russell GW) has a single measure.
+  measures: MeasureDto | MeasureDto[];
   notation: string;
   riverName: string;
   stageScale?: Scale | string;
@@ -67,7 +73,7 @@ export interface StationDto {
 }
 
 /**
- * A measure.
+ * Options for a station request.
  */
 export interface StationOptions {
   client?: Client;
@@ -85,11 +91,38 @@ export const fetchStation = async (
     `/id/stations/${id}`
   );
 
+  // Get the response and parse the DTO.
   const { response } = res;
   const json = res.json as ResponseJson<StationDto>;
-
-  // Get the response, casting the items to a Measure DTO.
   const data = parseStationDto(json.items);
+
+  return { data, json, response };
+};
+
+/**
+ * Fetch stations matching the request.
+ *
+ * parameter=p, parameterName=pn, qualifier=q, town=t, catchmentName=c,
+ * riverName=r, RLOIid=r, lat=y&long=x&dist=r, search=x (text in label),
+ * status=s, type=t
+ */
+export const fetchStations = async (
+  query: Record<string, unknown>,
+  options: StationOptions = {}
+): Promise<RiverDataResponse<StationDto[], ResponseJson<StationDto[]>>> => {
+  const client = options.client ?? (await createClient());
+  const res = await client.fetch<ResponseJson<StationDto[]>>(`/id/stations`, {
+    query: {
+      _limit: '10000',
+      _full: '',
+    },
+  });
+
+  // Get the response and parse the DTO.
+  const { response } = res;
+  const json = res.json as ResponseJson<StationDto[]>;
+  const data = json.items;
+
   return { data, json, response };
 };
 

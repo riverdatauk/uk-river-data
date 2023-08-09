@@ -36,5 +36,5 @@ export const createClient = async () => {
  * @returns A string in the EA API query parameter format.
  */
 export const toTimeParameter = (date: Date): string => {
-  return date.toISOString().substring(0, 19) + 'Z';
+  return date.toISOString().slice(0, 19) + 'Z';
 };

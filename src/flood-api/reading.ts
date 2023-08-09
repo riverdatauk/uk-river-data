@@ -58,18 +58,18 @@ export const parseReadingDtos = (
 ): Record<string, Reading[]> => {
   // Collect the readings according to the measure ID URLs.
   const longIds: Record<string, Reading[]> = {};
-  dtos.forEach(({ measure, dateTime, value }) => {
+  for (const { measure, dateTime, value } of dtos) {
     if (longIds[measure] == null) {
       longIds[measure] = [];
     }
     longIds[measure].unshift([new Date(dateTime).valueOf() / 1000, value]);
-  });
+  }
 
   // Strip the URLs from the measure IDs.
   const shortIds: Record<string, Reading[]> = {};
-  Object.entries(longIds).forEach(([key, range]) => {
-    shortIds[key.substring(key.lastIndexOf('/') + 1)] = range;
-  });
+  for (const [key, range] of Object.entries(longIds)) {
+    shortIds[key.slice(key.lastIndexOf('/') + 1)] = range;
+  }
 
   return shortIds;
 };

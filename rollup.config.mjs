@@ -7,8 +7,8 @@ import json from '@rollup/plugin-json';
 const pkg = JSON.parse(readFileSync('package.json'));
 
 // Human timestamp for banner.
-const datetime = new Date().toISOString().substring(0, 19).replace('T', ' ');
-const year = datetime.substring(0, 4);
+const datetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+const year = datetime.slice(0, 4);
 
 // Remove npm namespace from the package name.
 const pkgName = pkg.name.replace(/@.*\//, '');
